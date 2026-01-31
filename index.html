@@ -1,48 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Simple Page</title>
-  <style>
-    /* Minimal, safe CSS */
-    :root { --bg: #f7f7f9; --card: #ffffff; --accent: #3b82f6; --text: #111827; }
-    html,body { height:100%; margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text); }
-    .wrap { max-width:900px; margin:48px auto; padding:24px; background:var(--card); box-shadow:0 6px 18px rgba(15,23,42,0.06); border-radius:12px; }
-    header h1 { margin:0 0 6px 0; font-size:1.6rem; }
-    header p { margin:0 0 18px 0; color: #6b7280; }
-    .btn { display:inline-block; padding:10px 14px; border-radius:8px; background:var(--accent); color:white; text-decoration:none; font-weight:600; }
-    footer { margin-top:22px; color:#6b7280; font-size:0.9rem; }
-    .center { text-align:center; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi To-Do List Sederhana</title>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        button#add-btn {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button#add-btn:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-  <main class="wrap">
-    <header class="center">
-      <h1>Welcome — Simple Working Page</h1>
-      <p>A minimal HTML example that should work everywhere (local & GitHub Pages).</p>
-    </header>
 
-    <section>
-      <p>This page includes a small interactive bit below so you can confirm JavaScript runs:</p>
-      <div class="center">
-        <button id="timeBtn" class="btn">Show current time</button>
-        <p id="timeOutput" aria-live="polite" style="margin-top:12px"></p>
-      </div>
-    </section>
+    <div class="container">
+        <h2>Daftar Tugas</h2>
+        <div class="input-group">
+            <input type="text" id="todo-input" placeholder="Tambah tugas baru...">
+            <button id="add-btn">Tambah</button>
+        </div>
+        <ul id="todo-list">
+            </ul>
+    </div>
 
-    <footer class="center">
-      &copy; <span id="year"></span> — Simple Page
-    </footer>
-  </main>
+    <script>
+        const input = document.getElementById('todo-input');
+        const addBtn = document.getElementById('add-btn');
+        const todoList = document.getElementById('todo-list');
 
-  <script>
-    // Very small, safe JavaScript (will run on both local file and GitHub Pages)
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('timeBtn').addEventListener('click', function () {
-      const t = new Date().toLocaleString();
-      document.getElementById('timeOutput').textContent = 'Current local time: ' + t;
-    });
-  </script>
+        // Fungsi untuk menambah tugas
+        function addTask() {
+            const taskText = input.value.trim();
+            
+            if (taskText === "") {
+                alert("Tolong masukkan teks!");
+                return;
+            }
+
+            // Membuat elemen LI baru
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${taskText}</span>
+                <button class="delete-btn">Hapus</button>
+            `;
+
+            // Menambahkan fungsi hapus pada tombol
+            li.querySelector('.delete-btn').addEventListener('click', function() {
+                li.remove();
+            });
+
+            // Menambahkan LI ke dalam UL
+            todoList.appendChild(li);
+
+            // Menghapus isi input setelah ditambah
+            input.value = "";
+        }
+
+        // Event listener saat tombol diklik
+        addBtn.addEventListener('click', addTask);
+
+        // Event listener saat menekan tombol Enter
+        input.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+
 </body>
 </html>
